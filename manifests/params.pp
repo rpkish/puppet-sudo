@@ -40,12 +40,19 @@ class sudo::params {
       $package_admin_file = ''
       $config_file = '/etc/sudoers'
       $config_dir = '/etc/sudoers.d/'
-      $source = $::operatingsystemrelease ? {
-        /^5/    => "${source_base}sudoers.rhel5",
-        /^6/    => "${source_base}sudoers.rhel6",
-        /^7/    => "${source_base}sudoers.rhel7",
-        default => "${source_base}sudoers.rhel6",
-        }
+      if ($config_file_type == 'dist') {
+        $source = $::operatingsystemrelease ? {
+          /^5/    => "${source_base}sudoers.rhel5",
+          /^6/    => "${source_base}sudoers.rhel6",
+          /^7/    => "${source_base}sudoers.rhel7",
+          default => "${source_base}sudoers.rhel6",
+          }
+      } elsf ($config_file_type == 'hiera') {
+        notify { "this should kick off our hiera stuff": }
+        $source => "${source_base}sudoers.rhel6",
+      } else {
+        notify { "you have selected a config_file_type that is not supported: $config_file_type": }
+      }
       $config_file_group = 'root'
     }
     suse: {
