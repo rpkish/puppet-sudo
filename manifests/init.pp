@@ -118,14 +118,24 @@ class sudo(
     package_admin_file => $package_admin_file,
   }
 
-  file { $config_file:
-    ensure  => $file_ensure,
-    owner   => 'root',
-    group   => $sudo::params::config_file_group,
-    mode    => '0440',
-    replace => $config_file_replace,
-    source  => $source,
-    require => Package[$package],
+  if ($config_file_type == 'dist') {
+    file { $config_file:
+      ensure  => $file_ensure,
+      owner   => 'root',
+      group   => $sudo::params::config_file_group,
+      mode    => '0440',
+      replace => $config_file_replace,
+      source  => $source,
+      require => Package[$package],
+    }
+
+    if $config_file_replace == false and $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '5' {
+      augeas { 'includedirsudoers':
+        changes => ['set /files/etc/sudoers/#includedir /etc/sudoers.d'],
+        incl    => $config_file,
+        lens    => 'FixedSudoers.lns',
+      }
+    }
   }
 
   file { $config_dir:
@@ -137,14 +147,6 @@ class sudo(
     purge   => $purge,
     ignore  => $purge_ignore,
     require => Package[$package],
-  }
-
-  if $config_file_replace == false and $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '5' {
-    augeas { 'includedirsudoers':
-      changes => ['set /files/etc/sudoers/#includedir /etc/sudoers.d'],
-      incl    => $config_file,
-      lens    => 'FixedSudoers.lns',
-    }
   }
 
   # Load the Hiera based sudoer configuration (if enabled and present)
