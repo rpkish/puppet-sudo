@@ -66,6 +66,11 @@
 #     what you're doing.
 #     Default: auto-set, platform specific
 #
+#   [*config_file_type*]
+#     Use distribution provided sudoers or a customer sudoers with hiera
+#     Default: dist
+#     Options: dist, hiera
+#
 # Actions:
 #   Installs sudo package and checks the state of sudoers file and
 #   sudoers.d directory.
@@ -88,7 +93,8 @@ class sudo(
   $config_file         = $sudo::params::config_file,
   $config_file_replace = true,
   $config_dir          = $sudo::params::config_dir,
-  $source              = $sudo::params::source
+  $source              = $sudo::params::source,
+  $config_file_type    = $sudo::params::config_file_type
 ) inherits sudo::params {
 
 

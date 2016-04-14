@@ -2,6 +2,7 @@
 #Set the paramters for the sudo module
 class sudo::params {
   $source_base = "puppet:///modules/${module_name}/"
+  $config_file_type = 'dist'
 
   case $::osfamily {
     debian: {
