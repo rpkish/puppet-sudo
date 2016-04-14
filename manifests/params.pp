@@ -48,7 +48,7 @@ class sudo::params {
           default => "${source_base}sudoers.rhel6",
           }
       } elsf ($config_file_type == 'hiera') {
-        notify { "this should kick off our hiera stuff": }
+        notify { "this should kick off our hiera stuff": },
         $source => "${source_base}sudoers.rhel6",
       } else {
         notify { "you have selected a config_file_type that is not supported: $config_file_type": }
