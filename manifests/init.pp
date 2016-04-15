@@ -118,7 +118,17 @@ class sudo(
     package_admin_file => $package_admin_file,
   }
 
-  if ($config_file_type == 'dist') {
+  if ($config_file_type == 'hiera') {
+    file { $config_file:
+      ensure  => $file_ensure,
+      owner   => 'root',
+      group   => $sudo::params::config_file_group,
+      mode    => '0440',
+      content  => template("sudo/sudoers-hiera.erb"),
+      replace => $config_file_replace,
+      require => Package[$package],
+    }
+  } else {
     file { $config_file:
       ensure  => $file_ensure,
       owner   => 'root',
@@ -128,13 +138,13 @@ class sudo(
       source  => $source,
       require => Package[$package],
     }
+  }
 
-    if $config_file_replace == false and $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '5' {
-      augeas { 'includedirsudoers':
-        changes => ['set /files/etc/sudoers/#includedir /etc/sudoers.d'],
-        incl    => $config_file,
-        lens    => 'FixedSudoers.lns',
-      }
+  if $config_file_replace == false and $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '5' {
+    augeas { 'includedirsudoers':
+      changes => ['set /files/etc/sudoers/#includedir /etc/sudoers.d'],
+      incl    => $config_file,
+      lens    => 'FixedSudoers.lns',
     }
   }
 

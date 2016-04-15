@@ -98,15 +98,28 @@ define sudo::conf(
     $notify_real = undef
   }
 
-  file { "${priority_real}_${dname}":
-    ensure  => $ensure,
-    path    => $cur_file,
-    owner   => 'root',
-    group   => $sudo::params::config_file_group,
-    mode    => '0440',
-    source  => $source,
-    content => $content_real,
-    notify  => $notify_real,
+  if $sudo::params::config_file_type == 'hiera' {
+    notify { "i think we should be replacing the file here": }
+    file { "${priority_real}_${dname}":
+      ensure   => $ensure,
+      path     => $cur_file,
+      owner    => 'root',
+      group    => $sudo::params::config_file_group,
+      mode     => '0440',
+      content  => template("sudo/sudoers-hiera.erb"),
+      notify   => $notify_real
+    } 
+  } else {
+    file { "${priority_real}_${dname}":
+      ensure  => $ensure,
+      path    => $cur_file,
+      owner   => 'root',
+      group   => $sudo::params::config_file_group,
+      mode    => '0440',
+      source  => $source,
+      content => $content_real,
+      notify  => $notify_real
+    }
   }
 
   exec {"sudo-syntax-check for file ${cur_file}":

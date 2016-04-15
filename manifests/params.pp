@@ -1,9 +1,9 @@
 #class sudo::params 
 #Set the paramters for the sudo module
-class sudo::params {
+class sudo::params (
+  $config_file_type = undef,
+){
   $source_base = "puppet:///modules/${module_name}/"
-  $config_file_type = 'dist'
-
   case $::osfamily {
     debian: {
       case $::operatingsystem {
@@ -47,9 +47,9 @@ class sudo::params {
           /^7/    => "${source_base}sudoers.rhel7",
           default => "${source_base}sudoers.rhel6",
           }
-      } elsf ($config_file_type == 'hiera') {
-        notify { "this should kick off our hiera stuff": },
-        $source => "${source_base}sudoers.rhel6",
+      } elsif ($config_file_type == 'hiera') {
+        notify { "this should kick off our hiera stuff": }
+        $source = "${source_base}sudoers.rhel6"
       } else {
         notify { "you have selected a config_file_type that is not supported: $config_file_type": }
       }
