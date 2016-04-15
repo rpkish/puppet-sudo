@@ -94,9 +94,11 @@ class sudo(
   $config_file_replace = true,
   $config_dir          = $sudo::params::config_dir,
   $source              = $sudo::params::source,
-  $config_file_type    = $sudo::params::config_file_type
+  $config_file_type    = $sudo::params::config_file_type,
+  $defaults            = $sudo::params::defaults,
 ) inherits sudo::params {
 
+  notify { "default $defaults": }
 
   validate_bool($enable)
   case $enable {

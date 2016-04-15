@@ -2,6 +2,7 @@
 #Set the paramters for the sudo module
 class sudo::params (
   $config_file_type = undef,
+  $defaults         = undef,
 ){
   $source_base = "puppet:///modules/${module_name}/"
   case $::osfamily {
