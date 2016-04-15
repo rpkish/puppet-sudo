@@ -98,8 +98,6 @@ class sudo(
   $defaults            = $sudo::params::defaults,
 ) inherits sudo::params {
 
-  notify { "default $defaults": }
-
   validate_bool($enable)
   case $enable {
     true: {
