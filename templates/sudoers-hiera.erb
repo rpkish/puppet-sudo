@@ -1,0 +1,7 @@
+# This file is managed by Puppet 4
+
+<%- if @defaults -%>
+<% @defaults.each do |value| -%>
+Defaults: <%= value %>
+<% end -%>
+<%- end -%>
