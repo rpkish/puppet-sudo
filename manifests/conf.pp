@@ -99,7 +99,6 @@ define sudo::conf(
   }
 
   if $sudo::params::config_file_type == 'hiera' {
-    notify { "i think we should be replacing the file here": }
     file { "${priority_real}_${dname}":
       ensure   => $ensure,
       path     => $cur_file,
