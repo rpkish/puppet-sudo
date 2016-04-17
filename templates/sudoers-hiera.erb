@@ -1,7 +1,18 @@
 # This file is managed by Puppet 4
 
-<%- if @defaults -%>
-<% @defaults.each do |value| -%>
-Defaults: <%= value %>
-<% end -%>
-<%- end -%>
+> <%- if @osfamily == "RedHat" -%>
+5c6
+< Defaults: <%= value %>
+---
+> Defaults <%= value %>
+7a9,18
+> <%- end -%>
+> <%- if @osfamily == "Debian" -%>
+> <%- if @defaults -%>
+> <% @defaults.each do |value| -%>
+> Defaults  <%= value %>
+> <% end -%>
+> <%- end -%>
+> <%- end -%>
+> 
+> #includedir /etc/sudoers.d
