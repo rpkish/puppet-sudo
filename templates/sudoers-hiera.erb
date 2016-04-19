@@ -5,3 +5,5 @@
 <% defaults.each_pair do |key, val| -%> 
 Defaults<% if val['perm']-%>:<%=val['perm']-%><%end-%><% if val['option']-%> <%=val['option']-%><%end-%><% if val['operator']-%> <%=val['operator']-%><%end-%><% if val['args']-%> <%=val['args']-%><%end-%>
 <%end-%> 
+
+#includedir /etc/sudoers.d
