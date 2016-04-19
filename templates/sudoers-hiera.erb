@@ -1,18 +1,7 @@
-# This file is managed by Puppet 4
-
-<%- if @osfamily == "RedHat" -%>
-<%- if @defaults -%>
-<% @defaults.each do |value| -%>
-Defaults <%= value %>
-<% end -%>
-<%- end -%>
-<%- end -%>
-<%- if @osfamily == "Debian" -%>
-<%- if @defaults -%>
-<% @defaults.each do |value| -%>
-Defaults  <%= value %>
-<% end -%>
-<%- end -%>
-<%- end -%>
-
-#includedir /etc/sudoers.d
+# File is maintained with puppet
+<% 
+  defaults = scope.lookupvar('sudo::params::defaults')
+-%> 
+<% defaults.each_pair do |key, val| -%> 
+Defaults<% if val['perm']-%>:<%=val['perm']-%><%end-%><% if val['option']-%> <%=val['option']-%><%end-%><% if val['operator']-%> <%=val['operator']-%><%end-%><% if val['args']-%> <%=val['args']-%><%end-%>
+<%end-%> 
